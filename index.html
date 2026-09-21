@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SpecialWish Studio - Interactive Lamp Edition</title>
+  <title>SpecialWish Studio - Mobile Edition</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
@@ -27,10 +27,9 @@
       --lamp-glow-soft: rgba(255, 193, 7, 0.25);
       --lamp-beam-start: rgba(255, 235, 150, 0.85);
       --lamp-beam-mid: rgba(255, 213, 79, 0.25);
-      --lamp-desk-glow: radial-gradient(ellipse at center, rgba(255, 220, 100, 0.35) 0%, rgba(255, 180, 50, 0.08) 55%, transparent 75%);
       --bg-dark-off: #08090c;
       --bg-dark-on: #0e1117;
-      --glass-bg: rgba(22, 27, 34, 0.75);
+      --glass-bg: rgba(22, 27, 34, 0.85);
       --glass-border: rgba(255, 255, 255, 0.12);
       --text-main: #f0f6fc;
       --text-muted: #8b949e;
@@ -44,7 +43,6 @@
       --lamp-glow-soft: rgba(0, 188, 212, 0.25);
       --lamp-beam-start: rgba(128, 243, 255, 0.85);
       --lamp-beam-mid: rgba(0, 229, 255, 0.25);
-      --lamp-desk-glow: radial-gradient(ellipse at center, rgba(0, 229, 255, 0.35) 0%, rgba(0, 188, 212, 0.08) 55%, transparent 75%);
     }
 
     [data-theme="violet"] {
@@ -54,7 +52,6 @@
       --lamp-glow-soft: rgba(171, 71, 188, 0.25);
       --lamp-beam-start: rgba(234, 128, 252, 0.85);
       --lamp-beam-mid: rgba(213, 0, 249, 0.25);
-      --lamp-desk-glow: radial-gradient(ellipse at center, rgba(213, 0, 249, 0.35) 0%, rgba(171, 71, 188, 0.08) 55%, transparent 75%);
     }
 
     body {
@@ -64,135 +61,100 @@
       overflow-x: hidden;
     }
 
-    /* Room Ambience */
+    /* Mobile Room Layout */
     .room {
       position: relative;
-      width: 100vw;
-      min-height: 100vh;
+      width: 100%;
+      min-height: 100dvh;
       display: flex;
-      background: radial-gradient(circle at 35% 45%, #131720 0%, var(--bg-dark-off) 85%);
-      transition: background 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow-y: auto;
+      flex-direction: column;
+      align-items: center;
+      background: radial-gradient(circle at 50% 20%, #151a24 0%, var(--bg-dark-off) 80%);
+      transition: background 0.8s ease;
+      padding: 12px 14px 40px 14px;
     }
 
     .room.on {
-      background: radial-gradient(circle at 35% 45%, #19202c 0%, var(--bg-dark-on) 85%);
+      background: radial-gradient(circle at 50% 25%, #19202c 0%, var(--bg-dark-on) 85%);
     }
 
-    /* Stars / Sky */
-    .night-sky {
-      position: absolute;
-      top: 40px;
-      left: 50px;
-      width: 150px;
-      height: 220px;
-      border-radius: 12px;
-      border: 3px solid rgba(255, 255, 255, 0.06);
-      background: linear-gradient(180deg, #050811 0%, #0c1220 100%);
-      overflow: hidden;
-      opacity: 0.6;
-      transition: opacity 0.8s ease;
-      z-index: 1;
-    }
-    .room.on .night-sky { opacity: 0.25; }
-
-    .stars-cluster {
-      position: absolute;
-      inset: 0;
-      background-image: 
-        radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-        radial-gradient(1.5px 1.5px at 80px 40px, #aed581, transparent),
-        radial-gradient(1px 1px at 120px 100px, #fff, transparent),
-        radial-gradient(1.5px 1.5px at 60px 160px, #81d4fa, transparent);
-      animation: twinkle 3s ease-in-out infinite alternate;
-    }
-    @keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 0.9; } }
-
-    .room-light {
-      position: absolute;
-      top: -15%;
-      left: -10%;
-      width: 1000px;
-      height: 1000px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0;
-      transform: scale(0.6);
-      background: radial-gradient(circle, var(--lamp-glow-soft) 0%, transparent 70%);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .room.on .room-light { opacity: 1; transform: scale(1.4); }
-
-    .fireflies { position: fixed; inset: 0; pointer-events: none; z-index: 15; }
-    .firefly {
-      position: absolute;
-      border-radius: 50%;
-      background: var(--lamp-clr);
-      box-shadow: 0 0 12px 3px var(--lamp-glow-strong);
-      animation: flyMove var(--dur) ease-in-out var(--del) infinite alternate;
-    }
-    @keyframes flyMove {
-      0% { transform: translate(var(--x1), var(--y1)) scale(0.8); opacity: 0.2; }
-      100% { transform: translate(var(--x2), var(--y2)) scale(1.1); opacity: 0.8; }
-    }
-
-    /* Sound Switch */
+    /* Sound Switch Button */
     .top-controls {
-      position: fixed;
-      top: 20px;
-      right: 24px;
+      position: absolute;
+      top: 14px;
+      right: 14px;
       z-index: 100;
     }
     .sound-toggle {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: rgba(22, 27, 34, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(22, 27, 34, 0.7);
+      backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       color: #c9d1d9;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
     }
 
-    /* Lamp Side */
-    .lamp-side {
-      flex: 1;
+    /* Compact Mobile Lamp Section */
+    .lamp-section {
+      width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      min-height: 230px;
+      position: relative;
       z-index: 10;
-      padding: 40px 10px;
+      padding-top: 10px;
     }
+
     .lamp-container {
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transform: scale(1.1);
-      transform-origin: center bottom;
+      transform: scale(0.9);
+      transform-origin: center top;
     }
+
+    .pull-hint {
+      position: absolute;
+      top: 10px;
+      left: calc(50% + 65px);
+      background: rgba(20, 24, 33, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffd54f;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      animation: floatH 2s ease-in-out infinite;
+    }
+    .room.on .pull-hint { opacity: 0; }
+    @keyframes floatH { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
     .lamp-head {
-      width: 150px;
-      height: 58px;
+      width: 130px;
+      height: 50px;
       background: linear-gradient(135deg, #24292e 0%, #161b22 60%, #0d1117 100%);
-      border-radius: 150px 150px 8px 8px;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.9);
+      border-radius: 130px 130px 8px 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8);
       position: relative;
       z-index: 11;
-      border-bottom: 3px solid #111418;
+      border-bottom: 2px solid #111418;
       display: flex;
       justify-content: center;
       align-items: flex-end;
     }
     .lamp-inner-bulb {
-      width: 32px;
-      height: 14px;
+      width: 28px;
+      height: 12px;
       background: #2a2e37;
       border-radius: 50% 50% 0 0;
       margin-bottom: 2px;
@@ -200,16 +162,16 @@
     }
     .room.on .lamp-inner-bulb {
       background: var(--lamp-glow-core);
-      box-shadow: 0 0 20px 8px var(--lamp-clr);
+      box-shadow: 0 0 16px 6px var(--lamp-clr);
     }
     .lamp-glow {
       position: absolute;
-      top: 50px;
-      width: 100px;
-      height: 25px;
+      top: 45px;
+      width: 90px;
+      height: 22px;
       background: #fff;
       border-radius: 50%;
-      box-shadow: 0 0 45px 25px var(--lamp-glow-strong);
+      box-shadow: 0 0 40px 20px var(--lamp-glow-strong);
       opacity: 0;
       transition: opacity 0.4s ease;
       z-index: 10;
@@ -219,52 +181,39 @@
 
     .light-beam {
       position: absolute;
-      top: 55px;
-      width: 580px;
-      height: 380px;
+      top: 50px;
+      width: 360px;
+      height: 280px;
       clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
-      background: linear-gradient(180deg, var(--lamp-beam-start) 0%, var(--lamp-beam-mid) 50%, transparent 100%);
+      background: linear-gradient(180deg, var(--lamp-beam-start) 0%, var(--lamp-beam-mid) 45%, transparent 100%);
       opacity: 0;
       transition: opacity 0.5s ease;
       z-index: 6;
       pointer-events: none;
-      filter: blur(12px);
+      filter: blur(10px);
     }
-    .room.on .light-beam { opacity: 0.95; }
+    .room.on .light-beam { opacity: 0.85; }
 
     .lamp-stem {
-      width: 8px;
-      height: 280px;
+      width: 6px;
+      height: 120px;
       background: linear-gradient(90deg, #111418, #2f3640, #111418);
       z-index: 8;
     }
     .lamp-base {
-      width: 110px;
-      height: 18px;
+      width: 90px;
+      height: 14px;
       background: linear-gradient(180deg, #24292e, #161b22);
-      border-radius: 40px 40px 6px 6px;
-      border-bottom: 3px solid #090c10;
+      border-radius: 30px 30px 4px 4px;
+      border-bottom: 2px solid #090c10;
       z-index: 9;
     }
-    .desk-surface {
-      position: absolute;
-      bottom: -40px;
-      width: 550px;
-      height: 110px;
-      background: var(--lamp-desk-glow);
-      border-radius: 50%;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      z-index: 3;
-      pointer-events: none;
-    }
-    .room.on .desk-surface { opacity: 1; }
 
     /* Pull String Handle */
     .string-svg {
       position: absolute;
-      top: 55px;
-      left: calc(50% + 56px);
+      top: 48px;
+      left: calc(50% + 48px);
       width: 4px;
       height: 4px;
       overflow: visible;
@@ -273,78 +222,50 @@
     }
     .string-svg path {
       stroke: #7d8590;
-      stroke-width: 2.2;
+      stroke-width: 2;
       stroke-linecap: round;
       fill: none;
     }
     .string-handle {
       position: absolute;
-      top: 145px;
-      left: calc(50% + 50px);
-      width: 15px;
-      height: 26px;
+      top: 130px;
+      left: calc(50% + 43px);
+      width: 14px;
+      height: 24px;
       background: linear-gradient(180deg, #f7d56e 0%, #c49826 60%, #7e5e0f 100%);
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: grab;
       z-index: 12;
       touch-action: none;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
     }
-    .string-handle.dragging { cursor: grabbing; }
 
-    .pull-hint {
-      position: absolute;
-      top: 12px;
-      left: calc(50% + 75px);
-      background: rgba(20, 24, 33, 0.85);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #e6edf3;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 11.5px;
-      font-weight: 600;
-      white-space: nowrap;
-      pointer-events: none;
-      animation: floatH 2.5s ease-in-out infinite;
-    }
-    .room.on .pull-hint { opacity: 0; }
-    @keyframes floatH { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-    /* Login & Dashboard Container */
-    .content-side {
-      flex: 1.2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    /* Card Section Mobile Fit */
+    .content-section {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
       z-index: 20;
-      padding: 30px 6% 30px 0;
     }
+
     .login-card {
       width: 100%;
-      max-width: 440px;
-      padding: 34px 28px;
-      border-radius: 26px;
+      padding: 22px 18px;
+      border-radius: 22px;
       background: var(--glass-bg);
-      backdrop-filter: blur(24px) saturate(180%);
+      backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
       opacity: 0;
-      transform: translateX(40px) scale(0.96);
-      filter: blur(10px);
+      transform: translateY(20px);
       pointer-events: none;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
     .room.on .login-card {
       opacity: 1;
-      transform: translateX(0) scale(1);
-      filter: blur(0);
+      transform: translateY(0);
       pointer-events: auto;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 30px -5px var(--lamp-glow-soft);
     }
 
     /* Tabs */
@@ -352,9 +273,9 @@
       display: flex;
       background: rgba(13, 17, 23, 0.6);
       padding: 4px;
-      border-radius: 14px;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .tab-btn {
       flex: 1;
@@ -362,11 +283,10 @@
       border: none;
       background: transparent;
       color: var(--text-muted);
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
-      border-radius: 10px;
+      border-radius: 9px;
       cursor: pointer;
-      transition: 0.25s;
     }
     .tab-btn.active {
       background: rgba(255, 255, 255, 0.12);
@@ -377,172 +297,144 @@
       width: 100%;
       background: rgba(13, 17, 23, 0.65);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      padding: 13px 14px;
+      border-radius: 12px;
+      padding: 12px 14px;
       font-size: 13.5px;
       color: #fff;
-      margin-bottom: 12px;
-      transition: 0.2s;
+      margin-bottom: 10px;
     }
     .input-field:focus {
       border-color: var(--lamp-clr);
-      box-shadow: 0 0 0 3px var(--lamp-glow-soft);
     }
     textarea.input-field {
-      height: 90px;
+      height: 80px;
       resize: none;
-      line-height: 1.5;
     }
 
     .btn-action {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       background: var(--lamp-clr);
       color: #0d1117;
-      font-size: 14.5px;
+      font-size: 14px;
       font-weight: 800;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
-      box-shadow: 0 6px 20px var(--lamp-glow-soft);
-      transition: 0.2s;
+      box-shadow: 0 4px 15px var(--lamp-glow-soft);
     }
     .btn-action:active { transform: scale(0.98); }
 
-    /* Guest Quick Access */
     .guest-btn {
       width: 100%;
-      margin-top: 10px;
-      padding: 11px;
-      border-radius: 14px;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.12);
       background: transparent;
       color: var(--text-muted);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.2s;
-    }
-    .guest-btn:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
-
-    /* Dash Panel (Hidden by default, shown after Login) */
-    #dashboard-view {
-      display: none;
     }
 
-    /* Stage Slot Builder Styles */
+    /* Dashboard Slots */
+    #dashboard-view { display: none; }
     .stage-item {
-      background: rgba(13, 17, 23, 0.55);
+      background: rgba(13, 17, 23, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 12px;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
     }
     .stage-top {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 8px;
-      font-size: 11.5px;
+      margin-bottom: 6px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--lamp-clr);
     }
     .btn-add-stage {
       width: 100%;
-      padding: 11px;
+      padding: 10px;
       background: rgba(255,255,255,0.05);
       border: 1px dashed rgba(255,255,255,0.2);
       border-radius: 12px;
       color: #c9d1d9;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .dev-branding {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 18px;
     }
     .dev-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 5px 12px;
       border-radius: 20px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #e6edf3;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       text-decoration: none;
-    }
-
-    @media (max-width: 900px) {
-      .room { flex-direction: column; }
-      .lamp-side { padding-top: 30px; min-height: 380px; flex: 0 0 auto; }
-      .content-side { padding: 10px 16px 50px 16px; flex: 0 0 auto; }
-      .night-sky { display: none; }
-      .lamp-container { transform: scale(0.9); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Procedural Sound Switch -->
+  <!-- Sound Toggle -->
   <div class="top-controls">
-    <button class="sound-toggle" id="soundToggle" title="Sound Effects">
+    <button class="sound-toggle" id="soundToggle">
       <i class="fa-solid fa-volume-high" id="soundIcon"></i>
     </button>
   </div>
 
   <main class="room" id="room">
     
-    <div class="night-sky">
-      <div class="stars-cluster"></div>
-    </div>
-    <div class="room-light" id="roomLight"></div>
-    <div class="fireflies" id="fireflies"></div>
-
-    <!-- Interactive Vintage Lamp -->
-    <section class="lamp-side">
+    <!-- Lamp Component (Mobile Fitted) -->
+    <div class="lamp-section">
       <div class="lamp-container" id="lampContainer">
-        <div class="pull-hint">Pull cord to turn ON 💡</div>
+        <div class="pull-hint">Pull cord to open 💡</div>
         <div class="lamp-glow"></div>
-        <div class="lamp-head" id="lampHead">
+        <div class="lamp-head">
           <div class="lamp-inner-bulb"></div>
         </div>
-        <div class="light-beam" id="lightBeam"></div>
+        <div class="light-beam"></div>
         <div class="lamp-stem"></div>
         <div class="lamp-base"></div>
-        <div class="desk-surface"></div>
 
         <svg class="string-svg">
-          <path id="stringPath" d="M 0 0 L 0 95"></path>
+          <path id="stringPath" d="M 0 0 L 0 85"></path>
         </svg>
 
-        <div class="string-handle" id="stringHandle" tabindex="0"></div>
+        <div class="string-handle" id="stringHandle"></div>
       </div>
-    </section>
+    </div>
 
-    <!-- Content Side (Auth / Studio Dashboard) -->
-    <section class="content-side">
-      
-      <!-- 1. Lamp Login Card -->
+    <!-- Login & Creator Card -->
+    <div class="content-section">
       <div class="login-card" id="loginCard">
         
-        <!-- Auth View -->
+        <!-- Login Panel -->
         <div id="auth-view">
           <div class="form-tabs">
             <button type="button" class="tab-btn active" id="btnTabSignIn" onclick="switchAuthTab('signin')">Sign In</button>
             <button type="button" class="tab-btn" id="btnTabSignUp" onclick="switchAuthTab('signup')">Create Account</button>
           </div>
 
-          <div style="text-align:center; margin-bottom:18px;">
-            <h2 style="font-size:22px; font-weight:800; color:#fff;" id="auth-title">Welcome Back</h2>
-            <p style="font-size:12.5px; color:var(--text-muted); margin-top:4px;" id="auth-sub">Pull the lamp & enter details to access Studio</p>
+          <div style="text-align:center; margin-bottom:14px;">
+            <h2 style="font-size:20px; font-weight:800; color:#fff;" id="auth-title">Welcome Back</h2>
+            <p style="font-size:12px; color:var(--text-muted); margin-top:3px;" id="auth-sub">Pull lamp cord to reveal workspace</p>
           </div>
 
-          <form id="auth-form" onsubmit="handleAuthSubmit(event)">
+          <form onsubmit="handleAuthSubmit(event)">
             <input type="text" id="auth-name" class="input-field" placeholder="Your Name" style="display:none;">
             <input type="email" id="auth-email" class="input-field" placeholder="Email Address" required>
             <input type="password" id="auth-pass" class="input-field" placeholder="Password" required>
@@ -552,47 +444,44 @@
           </form>
         </div>
 
-        <!-- 2. Studio Flow Builder (Visible after Login) -->
+        <!-- Dashboard Panel -->
         <div id="dashboard-view">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <div>
-              <span style="font-size:11px; font-weight:800; color:var(--lamp-clr); text-transform:uppercase;">SpecialWish Studio</span>
-              <h2 style="font-size:18px; font-weight:800; color:#fff;" id="user-greeting">Hi, Creator</h2>
+              <span style="font-size:10px; font-weight:800; color:var(--lamp-clr); text-transform:uppercase;">SpecialWish Studio</span>
+              <h2 style="font-size:16px; font-weight:800; color:#fff;" id="user-greeting">Hi, Creator</h2>
             </div>
-            <button onclick="logoutStudio()" style="background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Exit</button>
+            <button onclick="logoutStudio()" style="background:none; border:none; color:var(--text-muted); font-size:11px; cursor:pointer;"><i class="fa-solid fa-arrow-right-from-bracket"></i> Exit</button>
           </div>
 
-          <!-- Basic Info -->
           <input type="text" id="target-name" class="input-field" placeholder="Who is this for? (Name / Nickname)">
-          <input type="text" id="event-tag" class="input-field" placeholder="Event category (e.g. Birthday, Sorry, Proposal)" value="Special Secret ❤️">
+          <input type="text" id="event-tag" class="input-field" placeholder="Event tag (e.g. Birthday, Sorry, Love)" value="Special Secret ❤️">
 
-          <!-- Slides Container -->
-          <div style="font-size:11.5px; font-weight:800; color:var(--text-muted); margin:12px 0 6px 0;">INTERACTIVE SLIDES PIPELINE:</div>
+          <div style="font-size:11px; font-weight:800; color:var(--text-muted); margin:10px 0 6px 0;">INTERACTIVE SLIDES:</div>
           <div id="stages-container"></div>
 
           <button type="button" class="btn-add-stage" onclick="addStageSlot()">
-            <i class="fa-solid fa-plus"></i> Add Next Slide / Stage
+            <i class="fa-solid fa-plus"></i> Add Next Slide
           </button>
 
-          <!-- Audio & Pin -->
           <input type="text" id="yt-song" class="input-field" placeholder="YouTube song URL (Background music)">
           <input type="password" id="secret-pin" class="input-field" maxlength="4" placeholder="4-Digit secret code (Optional)">
           <input type="text" id="my-insta" class="input-field" placeholder="Your Instagram (for reaction DM)">
 
           <button type="button" class="btn-action" onclick="publishFlow()">
-            <i class="fa-solid fa-rocket"></i> Publish & Get Secret Link
+            <i class="fa-solid fa-rocket"></i> Publish & Get Link
           </button>
 
-          <div id="result-box" style="display:none; background:rgba(34,197,94,0.15); border:1px dashed #22c55e; border-radius:14px; padding:14px; text-align:center; margin-top:14px;">
-            <p style="font-size:12px; font-weight:700; color:#4ade80; margin-bottom:8px;">✔ Special Journey Link Created!</p>
-            <input type="text" id="out-url" class="input-field" readonly style="text-align:center; font-weight:700; color:var(--lamp-clr);">
-            <button class="btn-action" style="padding:10px; font-size:13px;" onclick="copyUrl()">
+          <div id="result-box" style="display:none; background:rgba(34,197,94,0.15); border:1px dashed #22c55e; border-radius:12px; padding:12px; text-align:center; margin-top:12px;">
+            <p style="font-size:11.5px; font-weight:700; color:#4ade80; margin-bottom:6px;">✔ Link Ready!</p>
+            <input type="text" id="out-url" class="input-field" readonly style="text-align:center; font-weight:700; color:var(--lamp-clr); margin-bottom:8px;">
+            <button class="btn-action" style="padding:9px; font-size:12px;" onclick="copyUrl()">
               <i class="fa-regular fa-copy"></i> Copy Link
             </button>
           </div>
         </div>
 
-        <!-- Designer Branding Badge -->
+        <!-- Branding -->
         <div class="dev-branding">
           <a href="https://instagram.com/madxninja_" target="_blank" class="dev-pill">
             <i class="fa-brands fa-instagram" style="color:var(--brand);"></i>
@@ -601,12 +490,11 @@
         </div>
 
       </div>
-    </section>
+    </div>
 
   </main>
 
   <script>
-    // Firebase Setup
     const firebaseConfig = {
       apiKey: "AIzaSyBlYdZljqsNcZvlky107-spvhIH7235UTk",
       databaseURL: "https://cyberwish-521fd-default-rtdb.firebaseio.com",
@@ -616,14 +504,12 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // Sound Synthesizer (Web Audio API)
+    // Procedural Sound
     let audioCtx = null;
     let soundEnabled = true;
 
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     }
 
@@ -632,10 +518,10 @@
       initAudio();
       if (!audioCtx) return;
       const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
 
       if (type === 'switch') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
         osc.type = 'square';
         osc.frequency.setValueAtTime(1000, now);
         osc.frequency.exponentialRampToValueAtTime(250, now + 0.06);
@@ -646,8 +532,6 @@
         osc.start(now);
         osc.stop(now + 0.07);
       } else if (type === 'pull') {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(320, now);
         osc.frequency.exponentialRampToValueAtTime(150, now + 0.05);
@@ -665,7 +549,7 @@
       document.getElementById('soundIcon').className = soundEnabled ? "fa-solid fa-volume-high" : "fa-solid fa-volume-xmark";
     });
 
-    // Lamp Pull & Physics
+    // Lamp String & Physics
     const THEMES = ['warm', 'cyber', 'violet'];
     let currentThemeIdx = -1;
     let isOn = false;
@@ -677,7 +561,6 @@
     const room = document.getElementById('room');
     const handle = document.getElementById('stringHandle');
     const path = document.getElementById('stringPath');
-    const fireflies = document.getElementById('fireflies');
 
     function applyTheme(t) {
       if (t === 'warm') document.documentElement.removeAttribute('data-theme');
@@ -688,8 +571,6 @@
       isOn = on;
       room.classList.toggle('on', isOn);
       playSound('switch');
-      if (isOn) createFireflies();
-      else fireflies.innerHTML = '';
     }
 
     function triggerPull() {
@@ -705,7 +586,7 @@
     }
 
     function updateString(y) {
-      path.setAttribute('d', `M 0 0 Q 0 ${(95 + y) * 0.5} 0 ${95 + y}`);
+      path.setAttribute('d', `M 0 0 Q 0 ${(85 + y) * 0.5} 0 ${85 + y}`);
       handle.style.transform = `translateY(${y}px)`;
     }
 
@@ -734,40 +615,19 @@
 
     window.addEventListener('pointermove', (e) => {
       if (!isDragging) return;
-      curY = Math.max(0, Math.min(160, (e.clientY - startY) * 0.75));
+      curY = Math.max(0, Math.min(130, (e.clientY - startY) * 0.75));
       updateString(curY);
     });
 
     window.addEventListener('pointerup', () => {
       if (!isDragging) return;
       isDragging = false;
-      if (curY > 35) triggerPull();
+      if (curY > 30) triggerPull();
       startSpring(curY);
     });
 
-    function createFireflies() {
-      fireflies.innerHTML = '';
-      for (let i = 0; i < 20; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'firefly';
-        const sz = Math.random() * 4 + 3;
-        dot.style.width = sz + 'px';
-        dot.style.height = sz + 'px';
-        dot.style.setProperty('--dur', (Math.random() * 20 + 20) + 's');
-        dot.style.setProperty('--del', '-' + (Math.random() * 15) + 's');
-        dot.style.setProperty('--x1', Math.random() * 100 + 'vw');
-        dot.style.setProperty('--y1', Math.random() * 100 + 'vh');
-        dot.style.setProperty('--x2', Math.random() * 100 + 'vw');
-        dot.style.setProperty('--y2', Math.random() * 100 + 'vh');
-        fireflies.appendChild(dot);
-      }
-    }
-
-    // Auth & Dashboard Logic
-    let currentAuthMode = 'signin';
-
+    // Auth & Dash Navigation
     function switchAuthTab(mode) {
-      currentAuthMode = mode;
       document.getElementById('btnTabSignIn').classList.toggle('active', mode === 'signin');
       document.getElementById('btnTabSignUp').classList.toggle('active', mode === 'signup');
       document.getElementById('auth-name').style.display = mode === 'signup' ? 'block' : 'none';
@@ -801,7 +661,7 @@
       document.getElementById('auth-view').style.display = 'block';
     }
 
-    // Pipeline Stage Builder
+    // Pipeline Builder
     let stages = [];
 
     function addStageSlot(type = 'scratch', text = '', yesTxt = 'Yes! ❤️', noTxt = 'No 🥺', runAway = true) {
@@ -841,7 +701,7 @@
           </select>
           <textarea class="input-field" placeholder="Note / Question for this slide..." oninput="stages[${idx}].text = this.value">${s.text || ''}</textarea>
           <div style="display: ${s.type === 'question' ? 'block' : 'none'}; background:rgba(0,0,0,0.2); padding:8px; border-radius:10px;">
-            <div style="display:flex; gap:8px; margin-bottom:6px;">
+            <div style="display:flex; gap:6px; margin-bottom:6px;">
               <input type="text" class="input-field" style="margin-bottom:0;" placeholder="Yes Text" value="${s.yesTxt || 'Yes! ❤️'}" oninput="stages[${idx}].yesTxt = this.value">
               <input type="text" class="input-field" style="margin-bottom:0;" placeholder="No Text" value="${s.noTxt || 'No 🥺'}" oninput="stages[${idx}].noTxt = this.value">
             </div>
