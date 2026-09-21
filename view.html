@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>A Special Surprise For You ✨</title>
+  <title>A Special Journey For You ✨</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
@@ -41,8 +41,13 @@
       text-align: center;
       position: relative;
     }
-    .badge-mood {
-      display: inline-block;
+    .top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .badge-tag {
       padding: 4px 12px;
       background: #ffe4e6;
       color: #e11d48;
@@ -50,7 +55,11 @@
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      margin-bottom: 8px;
+    }
+    .slide-indicator {
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
     }
     .recipient-title {
       font-size: 22px;
@@ -58,16 +67,17 @@
       margin-bottom: 16px;
     }
 
+    /* Scratch Canvas */
     .scratch-box {
       position: relative;
       width: 100%;
       height: 170px;
       border-radius: 16px;
       overflow: hidden;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.04);
     }
-    .scratch-reveal-content {
+    .scratch-content {
       position: absolute;
       inset: 0;
       background: #fdf2f8;
@@ -81,7 +91,7 @@
       text-align: center;
     }
     .scratch-text {
-      font-size: 13.5px;
+      font-size: 14px;
       line-height: 1.5;
       font-weight: 600;
       color: #831843;
@@ -98,12 +108,13 @@
       cursor: crosshair;
     }
 
+    /* Gussa Meter */
     .meter-container {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 16px;
       padding: 16px;
-      margin-top: 14px;
+      margin-bottom: 14px;
       text-align: left;
     }
     .meter-label {
@@ -131,25 +142,93 @@
       cursor: pointer;
     }
 
+    /* Hold to Hug */
     .btn-hug {
       width: 100%;
-      padding: 13px;
+      padding: 14px;
       border-radius: 14px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-hug.unlocked {
+      background: #16a34a;
+    }
+
+    /* Pure Note Card */
+    .note-card {
+      background: #fdfaf7;
+      border: 1px solid #fed7aa;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 600;
+      color: #7c2d12;
+      margin-bottom: 14px;
+      text-align: left;
+      white-space: pre-wrap;
+    }
+
+    /* Custom Question Arena */
+    .q-arena {
+      min-height: 110px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .btn-custom-yes {
+      padding: 12px 24px;
+      border-radius: 14px;
+      background: #16a34a;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.3);
+      transition: all 0.2s;
+      z-index: 10;
+    }
+    .btn-custom-no {
+      padding: 11px 20px;
+      border-radius: 14px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      z-index: 20;
+    }
+
+    .btn-next-slide {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
       background: #0f172a;
       color: #fff;
       font-size: 13px;
       font-weight: 700;
       border: none;
       cursor: pointer;
-      margin-top: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: background 0.2s;
-    }
-    .btn-hug.unlocked {
-      background: #16a34a;
+      gap: 6px;
+      margin-top: 10px;
     }
 
     .btn-insta {
@@ -200,41 +279,40 @@
 
   <div class="app-card">
     
+    <!-- PIN Lock Overlay -->
     <div id="pin-gate">
       <i class="fa-solid fa-lock" style="font-size:32px; color:#e11d48; margin-bottom:10px;"></i>
       <h3 style="font-size:16px;">Protected Secret</h3>
       <p style="font-size:12px; color:#64748b; margin-top:4px; margin-bottom:14px;">Enter the 4-digit code to open</p>
       <input type="password" id="pass-in" maxlength="4" style="width:140px; font-size:24px; text-align:center; letter-spacing:8px; padding:8px; border:1px solid #cbd5e1; border-radius:10px; margin-bottom:12px;">
-      <button style="padding:10px 20px; background:#e11d48; color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer;" onclick="unlockPin()">Unlock Surprise</button>
+      <button style="padding:10px 20px; background:#e11d48; color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer;" onclick="unlockPin()">Unlock Journey</button>
     </div>
 
-    <span class="badge-mood" id="tag-mood">Special Wish</span>
+    <div class="top-meta">
+      <span class="badge-tag" id="tag-mood">Special Wish</span>
+      <span class="slide-indicator" id="slide-num">Slide 1 of 1</span>
+    </div>
     <h1 class="recipient-title" id="rec-name">Dearest</h1>
 
-    <div class="scratch-box">
-      <div class="scratch-reveal-content">
-        <div style="font-size:22px; margin-bottom:4px;" id="reveal-icon">❤️</div>
-        <div class="scratch-text" id="reveal-text">Loading message...</div>
-      </div>
-      <canvas id="scratch-canvas"></canvas>
+    <!-- Dynamic Container for Active Slide -->
+    <div id="slide-body"></div>
+
+    <!-- Next Slide Button -->
+    <button type="button" class="btn-next-slide" id="btn-advance" onclick="nextSlide()" style="display:none;">
+      Next Step <i class="fa-solid fa-arrow-right"></i>
+    </button>
+
+    <!-- Final Stage (Instagram Reply) -->
+    <div id="final-screen" style="display:none; margin-top:14px;">
+      <div style="font-size:42px; margin-bottom:8px;">❤️</div>
+      <h3 style="font-size:18px; margin-bottom:6px;">Journey Completed!</h3>
+      <p style="font-size:12.5px; color:#64748b; margin-bottom:14px;" id="final-closing">Send your real-time reaction on Instagram now:</p>
+      <a href="#" target="_blank" class="btn-insta" id="reply-insta-btn">
+        <i class="fa-brands fa-instagram"></i> Reply on Instagram
+      </a>
     </div>
 
-    <div class="meter-container" id="manana-panel" style="display:none;">
-      <div class="meter-label">
-        <span>Gussa Defuse Meter</span>
-        <span id="gussa-pct" style="color:#e11d48; font-weight:800;">100% Gussa</span>
-      </div>
-      <input type="range" min="0" max="100" value="100" class="slider-range" id="gussa-slider" oninput="handleGussa(this.value)">
-      
-      <button type="button" class="btn-hug" id="hug-btn" onmousedown="startHoldHug()" onmouseup="stopHoldHug()" ontouchstart="startHoldHug()" ontouchend="stopHoldHug()">
-        <i class="fa-solid fa-heart"></i> <span id="hug-label">Hold for 3s to accept apology</span>
-      </button>
-    </div>
-
-    <a href="#" target="_blank" class="btn-insta" id="reply-insta-btn" style="display:none;">
-      <i class="fa-brands fa-instagram"></i> Send Reply to Sender
-    </a>
-
+    <!-- Branding -->
     <div class="footer-dev">
       Designed & Developed with ❤️ by <a href="https://instagram.com/madxninja_" target="_blank">@madxninja_</a>
     </div>
@@ -251,49 +329,30 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let wishData = null;
-    let isAudioPlayed = false;
+    let flowData = null;
+    let currentIdx = 0;
+    let isMusicStarted = false;
     let hugTimer = null;
-    let hugSeconds = 0;
+    let yesScale = 1.0;
 
     const params = new URLSearchParams(window.location.search);
-    const wishId = params.get('id');
+    const flowId = params.get('id');
 
-    if (wishId) {
-      db.ref('special_wishes/' + wishId).once('value').then(snap => {
+    if (flowId) {
+      db.ref('custom_flows/' + flowId).once('value').then(snap => {
         if (snap.exists()) {
-          wishData = snap.val();
-          
-          const moodNames = {
-            sorry: '🥺 Sincere Apology',
-            love: '❤️ Eternal Love',
-            birthday: '🎂 Happy Birthday',
-            bestie: '🤝 Best Friends Forever'
-          };
+          flowData = snap.val();
+          document.getElementById('tag-mood').innerText = flowData.category || 'Special Secret';
+          document.getElementById('rec-name').innerText = flowData.name || 'Special One';
 
-          document.getElementById('tag-mood').innerText = moodNames[wishData.mood] || 'Special Wish';
-          document.getElementById('rec-name').innerText = wishData.name || 'Special One';
-          document.getElementById('reveal-text').innerText = wishData.message || '';
-
-          if (wishData.mood === 'sorry') {
-            document.getElementById('manana-panel').style.display = 'block';
-            document.getElementById('reveal-icon').innerText = '🥺';
-          } else if (wishData.mood === 'birthday') {
-            document.getElementById('reveal-icon').innerText = '🎂';
-          } else if (wishData.mood === 'bestie') {
-            document.getElementById('reveal-icon').innerText = '🤝';
+          if (flowData.replyInsta) {
+            document.getElementById('reply-insta-btn').href = 'https://instagram.com/' + flowData.replyInsta;
           }
 
-          if (wishData.replyInsta) {
-            const btn = document.getElementById('reply-insta-btn');
-            btn.href = 'https://instagram.com/' + wishData.replyInsta;
-            btn.style.display = 'inline-flex';
-          }
-
-          if (wishData.pin) {
+          if (flowData.pin) {
             document.getElementById('pin-gate').style.display = 'flex';
           } else {
-            initScratch();
+            startFlow();
           }
         }
       });
@@ -301,9 +360,9 @@
 
     function unlockPin() {
       const p = document.getElementById('pass-in').value.trim();
-      if (p === wishData.pin) {
+      if (p === flowData.pin) {
         document.getElementById('pin-gate').style.display = 'none';
-        initScratch();
+        startFlow();
       } else {
         alert("Incorrect passcode!");
       }
@@ -316,23 +375,100 @@
       document.getElementById('yt-hidden').innerHTML = `<iframe width="200" height="200" src="${url}" frameborder="0" allow="autoplay"></iframe>`;
     }
 
-    function initScratch() {
+    function startFlow() {
+      if (flowData.ytId && !isMusicStarted) {
+        isMusicStarted = true;
+        playHiddenYT(flowData.ytId);
+      }
+      renderCurrentSlide();
+    }
+
+    function renderCurrentSlide() {
+      const stages = flowData.stages || [];
+      if (currentIdx >= stages.length) {
+        // All slides finished -> Show Final Screen
+        document.getElementById('slide-body').style.display = 'none';
+        document.getElementById('btn-advance').style.display = 'none';
+        document.getElementById('slide-num').innerText = 'Completed ✔';
+        document.getElementById('final-screen').style.display = 'block';
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+        return;
+      }
+
+      document.getElementById('slide-num').innerText = `Slide ${currentIdx + 1} of ${stages.length}`;
+      const s = stages[currentIdx];
+      const body = document.getElementById('slide-body');
+      body.innerHTML = "";
+      document.getElementById('btn-advance').style.display = 'none';
+
+      if (s.type === 'scratch') {
+        body.innerHTML = `
+          <div class="scratch-box">
+            <div class="scratch-content">
+              <div style="font-size:20px; margin-bottom:4px;">✨</div>
+              <div class="scratch-text">${s.text || 'You mean everything to me.'}</div>
+            </div>
+            <canvas id="scratch-canvas"></canvas>
+          </div>
+        `;
+        initScratchCanvas();
+      } else if (s.type === 'gussa') {
+        body.innerHTML = `
+          <p style="font-size:13.5px; font-weight:600; color:#334155; margin-bottom:10px;">${s.text || 'Gussa ho na? Chalo slide karke 0% karo 🥺'}</p>
+          <div class="meter-container">
+            <div class="meter-label">
+              <span>Defuse Gussa:</span>
+              <span id="g-pct" style="color:#e11d48; font-weight:800;">100%</span>
+            </div>
+            <input type="range" min="0" max="100" value="100" class="slider-range" oninput="handleSlideGussa(this.value)">
+          </div>
+        `;
+      } else if (s.type === 'hug') {
+        body.innerHTML = `
+          <p style="font-size:14px; font-weight:600; color:#334155; margin-bottom:14px;">${s.text || 'Hold to send a warm tight hug 🫂'}</p>
+          <button type="button" class="btn-hug" id="h-btn" onmousedown="holdHugStart()" onmouseup="holdHugEnd()" ontouchstart="holdHugStart()" ontouchend="holdHugEnd()">
+            <i class="fa-solid fa-heart"></i> <span id="h-lbl">Hold for 3s to Promise</span>
+          </button>
+        `;
+      } else if (s.type === 'question') {
+        body.innerHTML = `
+          <h3 style="font-size:16px; margin-bottom:14px; color:#0f172a;">${s.text || 'Are you happy now?'}</h3>
+          <div class="q-arena" id="q-arena">
+            <button class="btn-custom-yes" id="btn-cyes" onclick="handleYesTap()">${s.yesTxt || 'Yes! ❤️'}</button>
+            <button class="btn-custom-no" id="btn-cno" onmouseover="dodgeNo(${s.runAway})" onclick="dodgeNo(${s.runAway})">${s.noTxt || 'No 🥺'}</button>
+          </div>
+        `;
+      } else {
+        // Pure Note
+        body.innerHTML = `
+          <div class="note-card">${s.text || 'Just wanted to remind you how special you are to me.'}</div>
+        `;
+        document.getElementById('btn-advance').style.display = 'flex';
+      }
+    }
+
+    function nextSlide() {
+      currentIdx++;
+      renderCurrentSlide();
+    }
+
+    /* Scratch Canvas Logic */
+    function initScratchCanvas() {
       const canvas = document.getElementById('scratch-canvas');
       const ctx = canvas.getContext('2d');
       const rect = canvas.getBoundingClientRect();
-      
       canvas.width = rect.width;
       canvas.height = rect.height;
 
       ctx.fillStyle = '#cbd5e1';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
       ctx.fillStyle = '#475569';
       ctx.font = 'bold 12px Plus Jakarta Sans, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('✨ SCRATCH GENTLY WITH FINGER ✨', canvas.width / 2, canvas.height / 2 + 4);
+      ctx.fillText('✨ SCRATCH WITH FINGER ✨', canvas.width / 2, canvas.height / 2 + 4);
 
       let isDrawing = false;
+      let scratchedYet = false;
 
       function scratch(e) {
         if (!isDrawing) return;
@@ -347,54 +483,84 @@
         ctx.arc(x, y, 22, 0, Math.PI * 2);
         ctx.fill();
 
-        if (!isAudioPlayed) {
-          isAudioPlayed = true;
-          if (wishData && wishData.ytId) playHiddenYT(wishData.ytId);
+        if (!scratchedYet) {
+          scratchedYet = true;
           confetti({ particleCount: 50, spread: 60, origin: { y: 0.5 } });
+          document.getElementById('btn-advance').style.display = 'flex';
         }
       }
 
       canvas.addEventListener('mousedown', () => isDrawing = true);
       canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
-
       window.addEventListener('mouseup', () => isDrawing = false);
       window.addEventListener('touchend', () => isDrawing = false);
-
       canvas.addEventListener('mousemove', scratch);
       canvas.addEventListener('touchmove', scratch);
     }
 
-    function handleGussa(val) {
-      const pctBox = document.getElementById('gussa-pct');
-      pctBox.innerText = val + '% Gussa';
+    /* Gussa Meter Handling */
+    function handleSlideGussa(val) {
+      const pct = document.getElementById('g-pct');
+      pct.innerText = val + '%';
       if (val == 0) {
-        pctBox.innerText = '0% (Maan Gaye! 🥺❤️)';
-        pctBox.style.color = '#16a34a';
-        confetti({ particleCount: 60, spread: 60, origin: { y: 0.7 } });
+        pct.innerText = '0% (Maan Gaye! ❤️)';
+        pct.style.color = '#16a34a';
+        confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
+        document.getElementById('btn-advance').style.display = 'flex';
       }
     }
 
-    function startHoldHug() {
-      const btn = document.getElementById('hug-btn');
+    /* Hold to Hug */
+    let hugSec = 0;
+    function holdHugStart() {
+      const btn = document.getElementById('h-btn');
       if (btn.classList.contains('unlocked')) return;
-      hugSeconds = 0;
+      hugSec = 0;
       hugTimer = setInterval(() => {
-        hugSeconds += 1;
-        document.getElementById('hug-label').innerText = `Holding... ${3 - hugSeconds}s`;
-        if (hugSeconds >= 3) {
+        hugSec++;
+        document.getElementById('h-lbl').innerText = `Holding... ${3 - hugSec}s`;
+        if (hugSec >= 3) {
           clearInterval(hugTimer);
           btn.classList.add('unlocked');
-          document.getElementById('hug-label').innerText = 'Apology Accepted! ❤️ (Tight Hug)';
-          confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+          document.getElementById('h-lbl').innerText = 'Hug Delivered! ❤️';
+          confetti({ particleCount: 80, spread: 80, origin: { y: 0.6 } });
+          document.getElementById('btn-advance').style.display = 'flex';
         }
       }, 1000);
     }
 
-    function stopHoldHug() {
-      const btn = document.getElementById('hug-btn');
+    function holdHugEnd() {
+      const btn = document.getElementById('h-btn');
       if (btn.classList.contains('unlocked')) return;
       clearInterval(hugTimer);
-      document.getElementById('hug-label').innerText = 'Hold for 3s to accept apology';
+      document.getElementById('h-lbl').innerText = 'Hold for 3s to Promise';
+    }
+
+    /* Custom Yes/No Handling */
+    function dodgeNo(shouldRun) {
+      if (!shouldRun) return;
+      const btnNo = document.getElementById('btn-cno');
+      const btnYes = document.getElementById('btn-cyes');
+      const arena = document.getElementById('q-arena');
+
+      yesScale += 0.2;
+      btnYes.style.transform = `scale(${yesScale})`;
+
+      const maxX = arena.clientWidth - btnNo.clientWidth - 10;
+      const maxY = arena.clientHeight - btnNo.clientHeight - 10;
+
+      const rx = (Math.random() - 0.5) * maxX;
+      const ry = (Math.random() - 0.5) * maxY;
+
+      btnNo.style.position = 'absolute';
+      btnNo.style.left = `${Math.max(5, Math.min(maxX, arena.clientWidth/2 + rx))}px`;
+      btnNo.style.top = `${Math.max(5, Math.min(maxY, arena.clientHeight/2 + ry))}px`;
+    }
+
+    function handleYesTap() {
+      confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+      document.getElementById('btn-advance').style.display = 'flex';
+      document.getElementById('btn-advance').scrollIntoView({ behavior: 'smooth' });
     }
   </script>
 </body>

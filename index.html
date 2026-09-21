@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>SpecialWish - App Edition</title>
+  <title>SpecialWish Studio - Custom Flow Edition</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
@@ -87,32 +87,7 @@
       margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 6px;
-    }
-    .mood-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-    .mood-pill {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 12px 10px;
-      border-radius: 14px;
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-main);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.15s ease;
-    }
-    .mood-pill.active {
-      background: var(--brand-soft);
-      border-color: var(--brand);
-      color: var(--brand);
-      font-weight: 700;
+      justify-content: space-between;
     }
     .input-field {
       width: 100%;
@@ -130,10 +105,61 @@
       background: #fff;
     }
     textarea.input-field {
-      height: 120px;
+      height: 90px;
       resize: none;
       line-height: 1.5;
     }
+    select.input-field {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Stage Slot Builder */
+    .stage-item {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .stage-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .stage-number {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--brand);
+    }
+    .btn-remove-stage {
+      background: none;
+      border: none;
+      color: #ef4444;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-add-stage {
+      width: 100%;
+      padding: 11px;
+      background: #f1f5f9;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      color: #475569;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .btn-add-stage:active { transform: scale(0.98); }
+
     .btn-action {
       width: 100%;
       padding: 14px;
@@ -183,50 +209,52 @@
       font-weight: 700;
       text-decoration: none;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: 0.2s;
     }
-    .dev-pill:active { transform: scale(0.96); }
-    .dev-pill i { color: #e11d48; font-size: 13px; }
-    .dev-caption { font-size: 11px; color: #94a3b8; }
   </style>
 </head>
 <body>
 
   <div class="app-shell">
     <div class="app-header">
-      <div class="badge-clean"><i class="fa-solid fa-heart"></i> For Someone Special</div>
-      <h1>SpecialWish Studio</h1>
-      <p class="subtitle">Interactive scratch, apology meters & personal surprises.</p>
+      <div class="badge-clean"><i class="fa-solid fa-wand-magic-sparkles"></i> Custom Experience Builder</div>
+      <h1>SpecialWish Flow</h1>
+      <p class="subtitle">Design slide-by-slide interactive scratch, meters & custom buttons.</p>
     </div>
 
+    <!-- Step 1: Basic Info -->
     <div class="card-panel">
-      <div class="step-title"><i class="fa-solid fa-sparkles"></i> 1. Choose Intention</div>
-      <div class="mood-grid">
-        <button type="button" class="mood-pill active" onclick="setMood(this, 'sorry')"><i class="fa-solid fa-heart-crack"></i> Sorry / Manana</button>
-        <button type="button" class="mood-pill" onclick="setMood(this, 'love')"><i class="fa-solid fa-heart"></i> Love & Proposal</button>
-        <button type="button" class="mood-pill" onclick="setMood(this, 'birthday')"><i class="fa-solid fa-cake-candles"></i> Birthday Wish</button>
-        <button type="button" class="mood-pill" onclick="setMood(this, 'bestie')"><i class="fa-solid fa-user-group"></i> Best Friend</button>
-      </div>
-    </div>
-
-    <div class="card-panel">
-      <div class="step-title"><i class="fa-solid fa-envelope"></i> 2. Who & Secret Note</div>
+      <div class="step-title"><span><i class="fa-solid fa-user"></i> 1. Basic Details</span></div>
       <input type="text" id="target-name" class="input-field" placeholder="Who is this for? (Name / Nickname)">
-      <textarea id="hidden-msg" class="input-field" placeholder="Write from your heart... It will be unlocked through interactive actions!"></textarea>
+      <input type="text" id="event-tag" class="input-field" placeholder="Category tag (e.g. For My Love, Birthday, Sorry)" value="Special Secret ❤️">
     </div>
 
+    <!-- Step 2: Custom Multi-Stage Flow -->
     <div class="card-panel">
-      <div class="step-title"><i class="fa-solid fa-sliders"></i> 3. Audio & Passcode</div>
-      <input type="text" id="yt-song" class="input-field" placeholder="YouTube song URL (Audio plays in background)">
-      <input type="password" id="secret-pin" class="input-field" maxlength="4" placeholder="4-Digit unlock code (Optional)">
-      <input type="text" id="my-insta" class="input-field" placeholder="Your Instagram username (for direct reply)">
+      <div class="step-title">
+        <span><i class="fa-solid fa-layer-group"></i> 2. Slide-by-Slide Stages</span>
+        <span style="font-size:10px; color:var(--text-muted);">Choose style for each</span>
+      </div>
 
-      <button type="button" class="btn-action" onclick="createSurprise()">
-        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Special Link
+      <div id="stages-container"></div>
+
+      <button type="button" class="btn-add-stage" onclick="addStageSlot()">
+        <i class="fa-solid fa-plus"></i> Add Next Slide / Stage
+      </button>
+    </div>
+
+    <!-- Step 3: Music & Lock -->
+    <div class="card-panel">
+      <div class="step-title"><span><i class="fa-solid fa-sliders"></i> 3. Audio & Sharing</span></div>
+      <input type="text" id="yt-song" class="input-field" placeholder="YouTube song URL (Background audio)">
+      <input type="password" id="secret-pin" class="input-field" maxlength="4" placeholder="4-Digit unlock code (Optional)">
+      <input type="text" id="my-insta" class="input-field" placeholder="Your Instagram (for direct reply)">
+
+      <button type="button" class="btn-action" onclick="publishFlow()">
+        <i class="fa-solid fa-rocket"></i> Create Multi-Slide Surprise
       </button>
 
       <div id="result-box">
-        <p style="font-size:12px; font-weight:700; color:#16a34a; margin-bottom:8px;">✔ Special Link Ready to Share!</p>
+        <p style="font-size:12px; font-weight:700; color:#16a34a; margin-bottom:8px;">✔ Multi-Stage Flow is Live!</p>
         <input type="text" id="out-url" class="input-field" readonly style="text-align:center; font-weight:700; color:var(--brand);">
         <button class="btn-action" style="padding:10px; font-size:13px;" onclick="copyUrl()">
           <i class="fa-regular fa-copy"></i> Copy Link
@@ -234,14 +262,13 @@
       </div>
     </div>
 
+    <!-- Branding -->
     <div class="dev-branding">
       <a href="https://instagram.com/madxninja_" target="_blank" class="dev-pill">
-        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-instagram" style="color:var(--brand);"></i>
         <span>Designed & Developed by @madxninja_</span>
       </a>
-      <span class="dev-caption">Crafted with care for your closest connections</span>
     </div>
-
   </div>
 
   <script>
@@ -254,22 +281,75 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let selectedMood = 'sorry';
+    let stages = [];
 
-    const defaultNotes = {
-      sorry: "I know I made a mistake, and your silence hurts more than anything. I promise to be better, listen more, and never let this happen again. Please forgive me? 🥺",
-      love: "In a world where everything changes, my feelings for you only grow stronger each day. You are my home, my peace, and my favorite thought. ❤️",
-      birthday: "Wishing the most special human a very Happy Birthday! May your smile never fade and all your quiet dreams turn into reality. 🎂✨",
-      bestie: "To my favorite person to be completely crazy with! Thank you for standing by me through every high and low. You are irreplaceable. 🤝🔥"
+    window.onload = () => {
+      // Default 2 stages to start with
+      addStageSlot('scratch', 'You are the most precious part of my life. Never forget that! ✨');
+      addStageSlot('question', 'Will you always smile like this?', 'Yes forever! ❤️', 'No way 😜', true);
     };
 
-    document.getElementById('hidden-msg').value = defaultNotes.sorry;
+    function addStageSlot(type = 'scratch', text = '', yesTxt = 'Yes! ❤️', noTxt = 'No 🥺', runAway = true) {
+      const id = Date.now() + Math.random();
+      stages.push({ id, type, text, yesTxt, noTxt, runAway });
+      renderStages();
+    }
 
-    function setMood(btn, mood) {
-      document.querySelectorAll('.mood-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedMood = mood;
-      document.getElementById('hidden-msg').value = defaultNotes[mood];
+    function removeStageSlot(id) {
+      if (stages.length <= 1) return alert("At least 1 slide is required!");
+      stages = stages.filter(s => s.id !== id);
+      renderStages();
+    }
+
+    function updateStageType(id, newType) {
+      const s = stages.find(item => item.id === id);
+      if (s) {
+        s.type = newType;
+        renderStages();
+      }
+    }
+
+    function renderStages() {
+      const box = document.getElementById('stages-container');
+      box.innerHTML = "";
+
+      stages.forEach((s, idx) => {
+        const div = document.createElement('div');
+        div.className = 'stage-item';
+
+        div.innerHTML = `
+          <div class="stage-top">
+            <span class="stage-number">Slide ${idx + 1}</span>
+            <button type="button" class="btn-remove-stage" onclick="removeStageSlot(${s.id})"><i class="fa-solid fa-trash"></i></button>
+          </div>
+
+          <label style="font-size:11px; font-weight:700; color:var(--text-muted); display:block; margin-bottom:4px;">Action on this slide:</label>
+          <select class="input-field" onchange="updateStageType(${s.id}, this.value)">
+            <option value="scratch" ${s.type === 'scratch' ? 'selected' : ''}>✨ Scratch Card Reveal</option>
+            <option value="gussa" ${s.type === 'gussa' ? 'selected' : ''}>🥺 Gussa Defuse Slider (100% to 0%)</option>
+            <option value="hug" ${s.type === 'hug' ? 'selected' : ''}>🫂 3-Second Hold to Hug / Promise</option>
+            <option value="question" ${s.type === 'question' ? 'selected' : ''}>❓ Custom Question (Custom Yes / No)</option>
+            <option value="note" ${s.type === 'note' ? 'selected' : ''}>💌 Soft Heartfelt Note (Read Only)</option>
+          </select>
+
+          <!-- Input for Message -->
+          <textarea class="input-field" placeholder="Write message/note for this slide..." oninput="stages[${idx}].text = this.value">${s.text || ''}</textarea>
+
+          <!-- Extra inputs if Question is selected -->
+          <div id="q-extra-${s.id}" style="display: ${s.type === 'question' ? 'block' : 'none'}; background:#fff; padding:10px; border-radius:12px; border:1px solid #e2e8f0; margin-top:4px;">
+            <label style="font-size:11px; font-weight:700; color:#334155; display:block; margin-bottom:4px;">Customize Button Texts:</label>
+            <div style="display:flex; gap:8px; margin-bottom:8px;">
+              <input type="text" class="input-field" style="margin-bottom:0; flex:1;" placeholder="Yes button text" value="${s.yesTxt || 'Yes! ❤️'}" oninput="stages[${idx}].yesTxt = this.value">
+              <input type="text" class="input-field" style="margin-bottom:0; flex:1;" placeholder="No button text" value="${s.noTxt || 'No 🥺'}" oninput="stages[${idx}].noTxt = this.value">
+            </div>
+            <label style="font-size:11px; font-weight:700; color:#64748b; display:flex; align-items:center; gap:6px; cursor:pointer;">
+              <input type="checkbox" ${s.runAway ? 'checked' : ''} onchange="stages[${idx}].runAway = this.checked">
+              Make 'No' button run away when tapped! 😉
+            </label>
+          </div>
+        `;
+        box.appendChild(div);
+      });
     }
 
     function extractYouTubeID(url) {
@@ -286,18 +366,18 @@
       return r;
     }
 
-    function createSurprise() {
+    function publishFlow() {
       const name = document.getElementById('target-name').value.trim() || 'Special One';
-      const msg = document.getElementById('hidden-msg').value.trim() || defaultNotes[selectedMood];
+      const cat = document.getElementById('event-tag').value.trim() || 'Special Wish ❤️';
       const ytId = extractYouTubeID(document.getElementById('yt-song').value.trim());
       const pin = document.getElementById('secret-pin').value.trim();
       const insta = document.getElementById('my-insta').value.trim().replace('@', '');
 
       const key = makeKey();
-      db.ref('special_wishes/' + key).set({
+      db.ref('custom_flows/' + key).set({
         name: name,
-        mood: selectedMood,
-        message: msg,
+        category: cat,
+        stages: stages,
         ytId: ytId || null,
         pin: pin || null,
         replyInsta: insta || null,
@@ -314,7 +394,7 @@
       const b = document.getElementById('out-url');
       b.select();
       navigator.clipboard.writeText(b.value);
-      alert("Surprise link copied to clipboard!");
+      alert("Surprise flow link copied to clipboard!");
     }
   </script>
 </body>
