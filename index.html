@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>GoldenWish Studio - Scratch & Reveal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --brand: #2563eb;
+      --brand-soft: #eff6ff;
+      --border: #e2e8f0;
+      --gold: #d97706;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      min-height: 100dvh;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .app-shell {
+      max-width: 440px;
+      width: 100%;
+      margin: 0 auto;
+      padding-bottom: 30px;
+    }
+    .app-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-top: 10px;
+    }
+    .badge-clean {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fef3c7;
+      color: var(--gold);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .wizard-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    }
+    .step-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--brand);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .mood-pill {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .mood-pill.active {
+      background: var(--brand-soft);
+      border-color: var(--brand);
+      color: var(--brand);
+      font-weight: 700;
+    }
+    .input-field {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13.5px;
+      color: var(--text-main);
+      margin-bottom: 10px;
+      transition: border 0.15s;
+    }
+    .input-field:focus {
+      border-color: var(--brand);
+      background: #fff;
+    }
+    textarea.input-field {
+      height: 95px;
+      resize: none;
+      line-height: 1.5;
+    }
+    .coupon-box {
+      background: #fffbeb;
+      border: 1px dashed #fcd34d;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 8px;
+    }
+    .coupon-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .coupon-input {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .btn-action {
+      width: 100%;
+      padding: 14px;
+      background: var(--text-main);
+      border: none;
+      border-radius: 14px;
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .btn-action:active { transform: scale(0.98); }
+    #result-box {
+      display: none;
+      background: #f0fdf4;
+      border: 1px dashed #22c55e;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+    <div class="app-header">
+      <div class="badge-clean"><i class="fa-solid fa-sparkles"></i> Clean Scratch Engine</div>
+      <h1>Create Scratch Surprise</h1>
+      <p class="subtitle">Interactive scratch-to-reveal card with redeemable coupons.</p>
+    </div>
+
+    <!-- Step 1: Mood & Recipient -->
+    <div class="wizard-card">
+      <div class="step-title"><i class="fa-solid fa-user"></i> 1. Who & What Mood</div>
+      <input type="text" id="target-name" class="input-field" placeholder="For whom? (e.g. Priya / Bro)">
+      
+      <div class="pill-grid">
+        <button type="button" class="mood-pill active" onclick="setMood(this, 'Special Love ❤️')">Special Love</button>
+        <button type="button" class="mood-pill" onclick="setMood(this, 'Birthday Bash 🎂')">Birthday Wish</button>
+        <button type="button" class="mood-pill" onclick="setMood(this, 'Sincere Sorry 🥺')">Sincere Apology</button>
+        <button type="button" class="mood-pill" onclick="setMood(this, 'Best Friends 🤝')">Crazy Friendship</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Hidden Message & VIP Coupons -->
+    <div class="wizard-card">
+      <div class="step-title"><i class="fa-solid fa-gift"></i> 2. Hidden Card Details</div>
+      <textarea id="hidden-msg" class="input-field" placeholder="Secret message revealed after scratching..."></textarea>
+      
+      <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">VIP Redeemable Coupons (Editable):</div>
+      
+      <div class="coupon-box">
+        <div class="coupon-header"><span>Coupon 1</span><i class="fa-solid fa-ticket"></i></div>
+        <input type="text" id="cp-1" class="coupon-input" value="1x Long Late-Night Call / Talk 🌙">
+      </div>
+      <div class="coupon-box">
+        <div class="coupon-header"><span>Coupon 2</span><i class="fa-solid fa-ticket"></i></div>
+        <input type="text" id="cp-2" class="coupon-input" value="1x Free Pizza / Favorite Food Treat 🍕">
+      </div>
+      <div class="coupon-box">
+        <div class="coupon-header"><span>Coupon 3</span><i class="fa-solid fa-ticket"></i></div>
+        <input type="text" id="cp-3" class="coupon-input" value="1x 100% Anger Forgiveness Pass 🥺">
+      </div>
+    </div>
+
+    <!-- Step 3: Ambience & Final Link -->
+    <div class="wizard-card">
+      <div class="step-title"><i class="fa-solid fa-sliders"></i> 3. Options & Audio</div>
+      <input type="text" id="yt-song" class="input-field" placeholder="YouTube song URL (Plays softly in background)">
+      <input type="password" id="secret-pin" class="input-field" maxlength="4" placeholder="4-Digit unlock code (Optional)">
+      <input type="text" id="my-insta" class="input-field" placeholder="Your Instagram (for direct reply)">
+
+      <button type="button" class="btn-action" onclick="createScratchCard()">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Create Clean Scratch Card
+      </button>
+
+      <div id="result-box">
+        <p style="font-size:12px; font-weight:700; color:#16a34a; margin-bottom:8px;">✔ Your Scratch Card Link is Ready!</p>
+        <input type="text" id="out-url" class="input-field" readonly style="text-align:center; font-weight:700; color:var(--brand);">
+        <button class="btn-action" style="padding:10px; font-size:13px;" onclick="copyUrl()">
+          <i class="fa-regular fa-copy"></i> Copy Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlYdZljqsNcZvlky107-spvhIH7235UTk",
+      databaseURL: "https://cyberwish-521fd-default-rtdb.firebaseio.com",
+      projectId: "cyberwish-521fd",
+      appId: "1:158188886863:web:c04bac173f7a141732933a"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let selectedCategory = 'Special Love ❤️';
+
+    function setMood(btn, cat) {
+      document.querySelectorAll('.mood-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCategory = cat;
+    }
+
+    function extractYouTubeID(url) {
+      if (!url) return null;
+      const reg = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(reg);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function makeKey() {
+      const c = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let r = "";
+      for (let i = 0; i < 6; i++) r += c.charAt(Math.floor(Math.random() * c.length));
+      return r;
+    }
+
+    function createScratchCard() {
+      const name = document.getElementById('target-name').value.trim() || 'Special One';
+      const msg = document.getElementById('hidden-msg').value.trim() || 'You mean so much to me! Thank you for always making my world brighter. ✨';
+      const c1 = document.getElementById('cp-1').value.trim();
+      const c2 = document.getElementById('cp-2').value.trim();
+      const c3 = document.getElementById('cp-3').value.trim();
+      const ytId = extractYouTubeID(document.getElementById('yt-song').value.trim());
+      const pin = document.getElementById('secret-pin').value.trim();
+      const insta = document.getElementById('my-insta').value.trim().replace('@', '');
+
+      const key = makeKey();
+      db.ref('scratch_cards/' + key).set({
+        name: name,
+        category: selectedCategory,
+        message: msg,
+        coupons: [c1, c2, c3],
+        ytId: ytId || null,
+        pin: pin || null,
+        replyInsta: insta || null,
+        createdAt: Date.now()
+      }).then(() => {
+        const full = new URL('view.html?id=' + key, window.location.href).href;
+        document.getElementById('out-url').value = full;
+        document.getElementById('result-box').style.display = 'block';
+        document.getElementById('result-box').scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    function copyUrl() {
+      const b = document.getElementById('out-url');
+      b.select();
+      navigator.clipboard.writeText(b.value);
+      alert("Scratch card link copied!");
+    }
+  </script>
+</body>
+</html>
