@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Your Scratch Surprise 🎁</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+    body {
+      background: #f8fafc;
+      color: #0f172a;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .card-wrap {
+      max-width: 380px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .badge-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #eff6ff;
+      color: #2563eb;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .recipient-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+    
+    /* Interactive Scratch Area */
+    .scratch-container {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    .scratch-underlayer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #fef3c7, #fffbeb);
+      border: 1px dashed #f59e0b;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+    }
+    .under-msg {
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      color: #78350f;
+    }
+    #scratch-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      border-radius: 16px;
+      cursor: crosshair;
+    }
+
+    /* Coupons Wallet */
+    .coupons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .ticket-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .ticket-item.claimed {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .ticket-text {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      color: #334155;
+    }
+    .ticket-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #475569;
+      white-space: nowrap;
+    }
+    .ticket-item.claimed .ticket-badge {
+      background: #22c55e;
+      color: #fff;
+    }
+
+    .btn-insta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 20px;
+      border-radius: 12px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-top: 16px;
+    }
+
+    #yt-hidden { position: absolute; width: 2px; height: 2px; opacity: 0.01; pointer-events: none; }
+    
+    /* Pin Screen */
+    #pin-gate {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="yt-hidden"></div>
+
+  <div class="card-wrap">
+    
+    <!-- Pin Gate -->
+    <div id="pin-gate">
+      <i class="fa-solid fa-lock" style="font-size:32px; color:#2563eb; margin-bottom:10px;"></i>
+      <h3 style="font-size:16px;">Passcode Locked</h3>
+      <p style="font-size:12px; color:#64748b; margin-top:4px; margin-bottom:14px;">Enter the 4-digit secret PIN</p>
+      <input type="password" id="pass-in" maxlength="4" style="width:140px; font-size:24px; text-align:center; letter-spacing:8px; padding:8px; border:1px solid #cbd5e1; border-radius:10px; margin-bottom:12px;">
+      <button style="padding:10px 20px; background:#2563eb; color:#fff; border:none; border-radius:10px; font-weight:700; cursor:pointer;" onclick="unlockPin()">Unlock</button>
+    </div>
+
+    <span class="badge-tag" id="tag-label">Special Surprise</span>
+    <h1 class="recipient-title" id="rec-name">Dearest</h1>
+
+    <div class="scratch-container">
+      <div class="scratch-underlayer">
+        <div style="font-size: 20px; margin-bottom: 4px;">🎁</div>
+        <div class="under-msg" id="secret-message">Loading message...</div>
+      </div>
+      <canvas id="scratch-canvas"></canvas>
+    </div>
+
+    <div style="font-size: 11px; font-weight: 700; color: #64748b; text-align: left; margin-top: 4px;">YOUR REDEEMABLE COUPONS (TAP TO CLAIM):</div>
+    
+    <div class="coupons-list" id="coupons-box"></div>
+
+    <a href="#" target="_blank" class="btn-insta" id="reply-insta-btn" style="display:none;">
+      <i class="fa-brands fa-instagram"></i> Send Reaction on Instagram
+    </a>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBlYdZljqsNcZvlky107-spvhIH7235UTk",
+      databaseURL: "https://cyberwish-521fd-default-rtdb.firebaseio.com",
+      projectId: "cyberwish-521fd",
+      appId: "1:158188886863:web:c04bac173f7a141732933a"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let cardData = null;
+    let isScratched = false;
+
+    const params = new URLSearchParams(window.location.search);
+    const cardId = params.get('id');
+
+    if (cardId) {
+      db.ref('scratch_cards/' + cardId).once('value').then(snap => {
+        if (snap.exists()) {
+          cardData = snap.val();
+          document.getElementById('tag-label').innerText = cardData.category || 'Special Gift';
+          document.getElementById('rec-name').innerText = cardData.name || 'Special One';
+          document.getElementById('secret-message').innerText = cardData.message || '';
+
+          if (cardData.replyInsta) {
+            const btn = document.getElementById('reply-insta-btn');
+            btn.href = 'https://instagram.com/' + cardData.replyInsta;
+            btn.style.display = 'inline-flex';
+          }
+
+          renderCoupons(cardData.coupons || []);
+
+          if (cardData.pin) {
+            document.getElementById('pin-gate').style.display = 'flex';
+          } else {
+            initScratchCard();
+          }
+        }
+      });
+    }
+
+    function unlockPin() {
+      const p = document.getElementById('pass-in').value.trim();
+      if (p === cardData.pin) {
+        document.getElementById('pin-gate').style.display = 'none';
+        initScratchCard();
+      } else {
+        alert("Incorrect PIN code!");
+      }
+    }
+
+    function renderCoupons(arr) {
+      const box = document.getElementById('coupons-box');
+      box.innerHTML = arr.filter(Boolean).map((t, idx) => `
+        <div class="ticket-item" onclick="claimCoupon(this)">
+          <span class="ticket-text">${t}</span>
+          <span class="ticket-badge">CLAIM</span>
+        </div>
+      `).join('');
+    }
+
+    function claimCoupon(el) {
+      if (el.classList.contains('claimed')) return;
+      el.classList.add('claimed');
+      el.querySelector('.ticket-badge').innerText = 'CLAIMED ✔';
+      confetti({ particleCount: 50, spread: 50, origin: { y: 0.8 } });
+    }
+
+    function playAudio(ytId) {
+      if (!ytId) return;
+      const origin = window.location.origin;
+      const url = `https://www.youtube.com/embed/${ytId}?enablejsapi=1&autoplay=1&loop=1&playlist=${ytId}&controls=0&origin=${encodeURIComponent(origin)}`;
+      document.getElementById('yt-hidden').innerHTML = `<iframe width="200" height="200" src="${url}" frameborder="0" allow="autoplay"></iframe>`;
+    }
+
+    function initScratchCard() {
+      const canvas = document.getElementById('scratch-canvas');
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+
+      // Golden Scratch Layer
+      ctx.fillStyle = '#d1d5db';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      ctx.fillStyle = '#4b5563';
+      ctx.font = 'bold 13px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ SCRATCH WITH FINGER ✨', canvas.width / 2, canvas.height / 2 + 5);
+
+      let isDrawing = false;
+
+      function scratch(e) {
+        if (!isDrawing) return;
+        const b = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = clientX - b.left;
+        const y = clientY - b.top;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (!isScratched) {
+          isScratched = true;
+          if (cardData && cardData.ytId) playAudio(cardData.ytId);
+          confetti({ particleCount: 70, spread: 60, origin: { y: 0.5 } });
+        }
+      }
+
+      canvas.addEventListener('mousedown', () => isDrawing = true);
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+
+      window.addEventListener('mouseup', () => isDrawing = false);
+      window.addEventListener('touchend', () => isDrawing = false);
+
+      canvas.addEventListener('mousemove', scratch);
+      canvas.addEventListener('touchmove', scratch);
+    }
+  </script>
+</body>
+</html>
